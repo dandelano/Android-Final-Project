@@ -1,0 +1,44 @@
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:padding="16dp"
+    tools:context=".MainActivity">
+<TableRow>
+    <Button
+        android:layout_weight="2"
+        android:layout_height="200dp"
+        android:layout_margin="2dp"
+        android:text="@string/btnViewLibrary"
+        android:id="@+id/btnViewLibrary"
+        android:textSize="20sp" />
+    <Button
+        android:layout_weight="2"
+        android:layout_height="200dp"
+        android:layout_margin="2dp"
+        android:text="@string/btnAddMovie"
+        android:id="@+id/btnAddMovie"
+        android:textSize="20sp" />
+</TableRow>
+<TableRow>
+    <Button
+        android:layout_weight="2"
+        android:layout_height="200dp"
+        android:layout_margin="2dp"
+        android:text="@string/btnDeleteMovie"
+        android:id="@+id/btnDeleteMovie"
+        android:textSize="20sp" />
+    <Button
+        android:layout_weight="2"
+        android:layout_height="200dp"
+        android:layout_margin="2dp"
+        android:text="@string/btnEditMovie"
+        android:id="@+id/btnEditMovie"
+        android:textSize="20sp" />
+</TableRow>
+    <TableRow>
+        <ImageView
+            android:id="@+id/movieImg"
+            android:layout_height="wrap_content"/>
+    </TableRow>
+</TableLayout>
