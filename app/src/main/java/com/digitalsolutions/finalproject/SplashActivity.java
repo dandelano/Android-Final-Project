@@ -18,11 +18,11 @@ public class SplashActivity extends Activity {
             @Override
             public void run() {
                 finish();
-                startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                startActivity(new Intent(SplashActivity.this, MovieListActivity.class));
             }
         };
         Timer opening = new Timer();
-        opening.schedule(task, 4000);
+        opening.schedule(task, 2000);
     }
 
 }

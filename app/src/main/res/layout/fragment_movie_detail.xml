@@ -15,7 +15,7 @@
         android:layout_width="0dp"
         android:layout_weight="3"
         android:layout_height="match_parent"
-        android:id="@+id/movie_detail"
+        android:id="@+id/movie_title"
         style="?android:attr/textAppearanceLarge"
         android:padding="16dp"
         android:textIsSelectable="true" />
@@ -27,6 +27,15 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:id="@+id/movie_description"
+            android:textSize="18sp"/>
+    </TableRow>
+    <TableRow>
+        <TextView
+            android:layout_span="2"
+            android:layout_weight="4"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:id="@+id/movie_url"
             android:textSize="18sp"/>
     </TableRow>
 </TableLayout>

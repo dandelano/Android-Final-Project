@@ -8,7 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.digitalsolutions.finalproject.dummy.DummyContent;
+import com.digitalsolutions.finalproject.database.DatabaseHandler;
+import com.digitalsolutions.finalproject.database.Movie;
 
 /**
  * A fragment representing a single Movie detail screen.
@@ -26,7 +27,15 @@ public class MovieDetailFragment extends Fragment {
     /**
      * The dummy content this fragment is presenting.
      */
-    private DummyContent.DummyItem mItem;
+    private Movie mItem;
+
+    /**
+     * The UI elements showing the details of the Movie
+     */
+    private TextView txtTitle;
+    private TextView txtDescription;
+    private TextView txtWebUrl;
+    private ImageView imgCoverImg;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -43,7 +52,7 @@ public class MovieDetailFragment extends Fragment {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
-            mItem = DummyContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
+            mItem = DatabaseHandler.getInstance(getActivity()).getMovie(getArguments().getLong(ARG_ITEM_ID));
         }
     }
 
@@ -54,11 +63,39 @@ public class MovieDetailFragment extends Fragment {
 
         // Show the dummy content as text in a TextView.
         if (mItem != null) {
-            ((ImageView) rootView.findViewById(R.id.movie_image)).setImageResource(R.drawable.fillerimg);
-            ((TextView) rootView.findViewById(R.id.movie_detail)).setText(mItem.content);
-            ((TextView)rootView.findViewById(R.id.movie_description)).setText(R.string.txtDescription);
+            txtTitle = ((TextView) rootView.findViewById(R.id.movie_title));
+            txtTitle.setText(mItem.title);
+
+            txtDescription = ((TextView) rootView.findViewById(R.id.movie_description));
+            txtDescription.setText(mItem.description);
+
+            txtWebUrl = ((TextView) rootView.findViewById(R.id.movie_url));
+            txtWebUrl.setText(mItem.weburl);
+
+            imgCoverImg = ((ImageView) rootView.findViewById(R.id.movie_image));
+            // TODO: set the image using picasso
+            imgCoverImg.setImageResource(R.drawable.fillerimg);
         }
 
         return rootView;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        updateMovieFromUI();
+    }
+
+    private void updateMovieFromUI()
+    {
+        if (mItem != null)
+        {
+            mItem.title = txtTitle.getText().toString();
+            mItem.description = txtDescription.getText().toString();
+            mItem.weburl = txtWebUrl.getText().toString();
+            //mItem.imagepath = mItem.imagepath;
+
+            DatabaseHandler.getInstance(getActivity()).putMovie(mItem);
+        }
     }
 }

@@ -1,14 +1,19 @@
 package com.digitalsolutions.finalproject;
 
 import android.app.Activity;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.support.v4.app.LoaderManager.LoaderCallbacks;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.digitalsolutions.finalproject.database.Movie;
+import com.digitalsolutions.finalproject.database.MovieProvider;
 
-import com.digitalsolutions.finalproject.dummy.DummyContent;
 
 /**
  * A list fragment representing a list of Movies. This fragment
@@ -47,7 +52,7 @@ public class MovieListFragment extends ListFragment {
         /**
          * Callback for when an item has been selected.
          */
-        public void onItemSelected(String id);
+        public void onItemSelected(long id);
     }
 
     /**
@@ -56,7 +61,7 @@ public class MovieListFragment extends ListFragment {
      */
     private static Callbacks sDummyCallbacks = new Callbacks() {
         @Override
-        public void onItemSelected(String id) {
+        public void onItemSelected(long id) {
         }
     };
 
@@ -71,12 +76,29 @@ public class MovieListFragment extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // TODO: replace with a real list adapter.
-        setListAdapter(new ArrayAdapter<DummyContent.DummyItem>(
-                getActivity(),
-                android.R.layout.simple_list_item_activated_1,
-                android.R.id.text1,
-                DummyContent.ITEMS));
+        setListAdapter(new SimpleCursorAdapter(getActivity(),
+                android.R.layout.simple_list_item_activated_1, null, new String[] {
+                Movie.COL_TITLE }, new int[] { android.R.id.text1 }, 0));
+
+        // Load the content
+        getLoaderManager().initLoader(0, null, new LoaderCallbacks<Cursor>() {
+            @Override
+            public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+                return new CursorLoader(getActivity(),
+                        MovieProvider.URI_MOVIES, Movie.FIELDS, null, null,
+                        null);
+            }
+
+            @Override
+            public void onLoadFinished(Loader<Cursor> loader, Cursor c) {
+                ((SimpleCursorAdapter) getListAdapter()).swapCursor(c);
+            }
+
+            @Override
+            public void onLoaderReset(Loader<Cursor> arg0) {
+                ((SimpleCursorAdapter) getListAdapter()).swapCursor(null);
+            }
+        });
     }
 
     @Override
@@ -116,7 +138,7 @@ public class MovieListFragment extends ListFragment {
 
         // Notify the active callbacks interface (the activity, if the
         // fragment is attached to one) that an item has been selected.
-        mCallbacks.onItemSelected(DummyContent.ITEMS.get(position).id);
+        mCallbacks.onItemSelected(getListAdapter().getItemId(position));
     }
 
     @Override

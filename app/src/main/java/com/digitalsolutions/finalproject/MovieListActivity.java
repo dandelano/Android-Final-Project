@@ -3,6 +3,12 @@ package com.digitalsolutions.finalproject;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+
+import com.digitalsolutions.finalproject.database.DatabaseHandler;
+import com.digitalsolutions.finalproject.database.Movie;
 
 
 /**
@@ -47,7 +53,10 @@ public class MovieListActivity extends FragmentActivity
             ((MovieListFragment) getSupportFragmentManager()
                     .findFragmentById(R.id.movie_list))
                     .setActivateOnItemClick(true);
+
+
         }
+
 
         // TODO: If exposing deep links into your app, handle intents here.
     }
@@ -57,13 +66,13 @@ public class MovieListActivity extends FragmentActivity
      * indicating that the item with the given ID was selected.
      */
     @Override
-    public void onItemSelected(String id) {
+    public void onItemSelected(long id) {
         if (mTwoPane) {
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
             // fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(MovieDetailFragment.ARG_ITEM_ID, id);
+            arguments.putLong(MovieDetailFragment.ARG_ITEM_ID, id);
             MovieDetailFragment fragment = new MovieDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
@@ -77,5 +86,27 @@ public class MovieListActivity extends FragmentActivity
             detailIntent.putExtra(MovieDetailFragment.ARG_ITEM_ID, id);
             startActivity(detailIntent);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.list_activity, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        boolean result = false;
+        if (R.id.newMovie == item.getItemId()) {
+            result = true;
+            // Create a new movie.
+            Movie m = new Movie();
+            DatabaseHandler.getInstance(this).putMovie(m);
+            // Open a new fragment with the new id
+            onItemSelected(m.id);
+        }
+
+        return result;
     }
 }
