@@ -16,7 +16,7 @@ public class MovieProvider extends ContentProvider {
 
     // URIs
     // Used for all persons
-    public static final String MOVIES = SCHEME + AUTHORITY + "/person";
+    public static final String MOVIES = SCHEME + AUTHORITY + "/movie";
     public static final Uri URI_MOVIES = Uri.parse(MOVIES);
     // Used for a single person, just add the id to the end
     public static final String MOVIE_BASE = MOVIES + "/";

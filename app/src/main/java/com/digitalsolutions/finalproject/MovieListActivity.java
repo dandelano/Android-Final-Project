@@ -1,11 +1,13 @@
 package com.digitalsolutions.finalproject;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.digitalsolutions.finalproject.database.DatabaseHandler;
 import com.digitalsolutions.finalproject.database.Movie;
@@ -35,6 +37,8 @@ public class MovieListActivity extends FragmentActivity
      * device.
      */
     private boolean mTwoPane;
+    private long selectedId = -1;
+    static final int GET_MOVIE_REQUEST = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +72,8 @@ public class MovieListActivity extends FragmentActivity
     @Override
     public void onItemSelected(long id) {
         if (mTwoPane) {
+            // set the id
+            selectedId = id;
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
             // fragment transaction.
@@ -97,16 +103,54 @@ public class MovieListActivity extends FragmentActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        boolean result = false;
-        if (R.id.newMovie == item.getItemId()) {
-            result = true;
-            // Create a new movie.
-            Movie m = new Movie();
-            DatabaseHandler.getInstance(this).putMovie(m);
-            // Open a new fragment with the new id
-            onItemSelected(m.id);
-        }
+        // Handle item selection
 
-        return result;
+        switch (item.getItemId()) {
+            case R.id.newMovie:
+                // Create a new movie.
+                //TODO: start new activity for result
+                startActivityForResult(new Intent(MovieListActivity.this, GetMovieActivity.class), GET_MOVIE_REQUEST);
+                //Movie m_add = new Movie();
+                //DatabaseHandler.getInstance(this).putMovie(m_add);
+                // Open a new fragment with the new id
+                //onItemSelected(m_add.id);
+                return true;
+            case R.id.deleteMovie:
+                if (selectedId != -1) {
+                    // TODO: Fix the delete method!!! Not actually deleting the movie data.(Issue in detail frag, was inserting new movie)
+                    // TODO: put a confirmation before delete
+                    Movie m_delete = DatabaseHandler.getInstance(this).getMovie(selectedId);
+                    DatabaseHandler.getInstance(this).removeMovie(m_delete);
+                    selectedId = -1;
+                    onItemSelected(selectedId);
+                } else {
+                    Toast.makeText(this, "No movie selected", Toast.LENGTH_SHORT).show();
+                }
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode,resultCode,data);
+        switch (requestCode)
+        {
+            case (GET_MOVIE_REQUEST):
+            {
+                if(resultCode == Activity.RESULT_OK)
+                {
+                    // TODO: Extract movie data returned from the child activity.
+                    Movie m_add = new Movie();
+                    DatabaseHandler.getInstance(this).putMovie(m_add);
+                    // Open a new fragment with the new id
+                    onItemSelected(m_add.id);
+                }
+                break;
+            }
+        }
     }
 }

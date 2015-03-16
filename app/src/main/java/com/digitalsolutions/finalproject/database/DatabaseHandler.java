@@ -104,12 +104,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             final long id = db.insert(Movie.TABLE_NAME, null,
                     movie.getContent());
 
+
             if (id > -1) {
                 movie.id = id;
                 success = true;
             }
         }
 
+        
         if (success) {
             notifyProviderOnMovieChange();
         }
@@ -122,6 +124,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         final int result = db.delete(Movie.TABLE_NAME,
                 Movie.COL_ID + " IS ?",
                 new String[] { Long.toString(movie.id) });
+
 
         if (result > 0) {
             notifyProviderOnMovieChange();

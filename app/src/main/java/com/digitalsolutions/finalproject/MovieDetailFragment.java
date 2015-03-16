@@ -83,7 +83,7 @@ public class MovieDetailFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        updateMovieFromUI();
+        //updateMovieFromUI();
     }
 
     private void updateMovieFromUI()

@@ -4,5 +4,10 @@
         android:id="@+id/newMovie"
         android:orderInCategory="1"
         android:showAsAction="ifRoom|withText"
-        android:title="New" />
+        android:icon="@drawable/ic_action_new" />
+    <item
+        android:id="@+id/deleteMovie"
+        android:orderInCategory="2"
+        android:showAsAction="ifRoom|withText"
+        android:icon="@drawable/ic_action_discard" />
 </menu>

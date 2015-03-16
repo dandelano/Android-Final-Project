@@ -13,6 +13,7 @@ public class SplashActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(android.R.style.Theme_Black_NoTitleBar);
         setContentView(R.layout.activity_splash);
         TimerTask task = new TimerTask() {
             @Override

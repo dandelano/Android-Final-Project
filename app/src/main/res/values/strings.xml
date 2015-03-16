@@ -15,4 +15,7 @@
     <string name="title_movie_list">Movies</string>
     <string name="title_movie_detail">Movie Detail</string>
     <string name="txtDescription">Candy bonbon pastry jujubes lollipop wafer biscuit biscuit. Topping brownie sesame snaps sweet roll pie. Croissant danish biscuit soufflé caramels jujubes jelly. Dragée danish caramels lemon drops dragée. Gummi bears cupcake biscuit tiramisu sugar plum pastry. Dragée gummies applicake pudding liquorice. Donut jujubes oat cake jelly-o. Dessert bear claw chocolate cake gummies lollipop sugar plum ice cream gummies cheesecake.</string>
+    <string name="title_activity_get_movie">GetMovieActivity</string>
+
+    <string name="hello_world">Hello world!</string>
 </resources>
