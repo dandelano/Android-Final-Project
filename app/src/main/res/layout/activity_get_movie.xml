@@ -88,8 +88,7 @@
                 android:paddingTop="5dp"
                 android:paddingLeft="30dp"
                 android:paddingRight="30dp"
-                android:textSize="25sp"
-                android:clickable="true"
+                android:textSize="22sp"
                 android:text="http://something.com"
                 android:visibility="invisible"/>
         </TableRow>
@@ -100,7 +99,8 @@
         android:id="@+id/btnSaveMovie"
         android:layout_below="@+id/searchTableLayout"
         android:text="@string/btnSaveMovie"
-        android:layout_marginTop="5dp"
+        android:textSize="24sp"
+        android:layout_marginTop="10dp"
         android:layout_marginLeft="30dp"
         android:paddingLeft="30dp"
         android:paddingRight="30dp"

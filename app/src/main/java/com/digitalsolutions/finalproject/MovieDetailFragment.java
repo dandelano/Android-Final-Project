@@ -1,5 +1,7 @@
 package com.digitalsolutions.finalproject;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -18,6 +20,8 @@ import com.digitalsolutions.finalproject.database.Movie;
  * on handsets.
  */
 public class MovieDetailFragment extends Fragment {
+    private static final String HTTPS = "https://";
+    private static final String HTTP = "http://";
     /**
      * The fragment argument representing the item ID that this fragment
      * represents.
@@ -71,6 +75,21 @@ public class MovieDetailFragment extends Fragment {
 
             txtWebUrl = ((TextView) rootView.findViewById(R.id.movie_url));
             txtWebUrl.setText(mItem.weburl);
+            txtWebUrl.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String urlText = txtWebUrl.getText().toString();
+                    if(urlText.length() > 0)
+                    {
+                        if (!urlText.startsWith(HTTP) && !urlText.startsWith(HTTPS)) {
+                            urlText = HTTP + urlText;
+                        }
+
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlText));
+                        startActivity(Intent.createChooser(intent, "Chose browser"));
+                    }
+                }
+            });
 
             imgCoverImg = ((ImageView) rootView.findViewById(R.id.movie_image));
             // TODO: set the image using picasso

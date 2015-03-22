@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,16 +19,19 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.List;
+
 import info.movito.themoviedbapi.TmdbApi;
 import info.movito.themoviedbapi.TmdbMovies;
+import info.movito.themoviedbapi.TmdbSearch;
 import info.movito.themoviedbapi.model.MovieDb;
 import info.movito.themoviedbapi.model.config.TmdbConfiguration;
+import info.movito.themoviedbapi.model.core.MovieResultsPage;
 
 
 public class GetMovieActivity extends Activity {
     private final static String API_KEY = "17e38ce29cdddeefdaf66d281a0f087f";
-    private static final String HTTPS = "https://";
-    private static final String HTTP = "http://";
+
 
     // COL_TITLE, COL_DESCRIPTION,COL_IMAGEPATH, COL_WEBURL
     protected ImageView imgCover;
@@ -72,7 +74,8 @@ public class GetMovieActivity extends Activity {
                     ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
                     NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
                     if (networkInfo != null && networkInfo.isConnected()) {
-                        new GetMovieTask().execute("");
+
+                        new GetMovieTask().execute(searchTitle);//"Big Hero 6");
                     } else {
                         Toast.makeText(GetMovieActivity.this, "No Network connection available", Toast.LENGTH_LONG).show();
                     }
@@ -93,25 +96,12 @@ public class GetMovieActivity extends Activity {
                 finish();
             }
         });
-
-        url.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String urlText = url.getText().toString();
-                if(urlText.length() > 0)
-                {
-                    if (!urlText.startsWith(HTTP) && !urlText.startsWith(HTTPS)) {
-                        urlText = HTTP + urlText;
-                    }
-
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlText));
-                    startActivity(Intent.createChooser(intent, "Chose browser"));
-                }
-            }
-        });
     }
 
 
+    /**
+     *
+     */
     private void hideKeyboard() {
         // Check if no view has focus:
         View view = this.getCurrentFocus();
@@ -122,6 +112,9 @@ public class GetMovieActivity extends Activity {
     }
 
 
+    /**
+     *
+     */
     protected class MovieContainer
     {
         public String mImgUrl = "";
@@ -137,31 +130,76 @@ public class GetMovieActivity extends Activity {
         }
     }
 
-    private class GetMovieTask extends AsyncTask<String, Void, MovieContainer> {
-        @Override
-        protected MovieContainer doInBackground(String... urls) {
-            try {
-                TmdbApi tmdbApi = new TmdbApi(API_KEY);
-                TmdbConfiguration config = tmdbApi.getConfiguration();
 
-                /*TmdbSearch tmdbSearch = tmdbApi.getSearch();
-                MovieResultsPage movieResultsPage = tmdbSearch.searchMovie("Big Hero 6", 0, "en", false, 0);
-                MovieDb movie;
+
+    /**
+     *
+     */
+    private class GetMovieTask extends AsyncTask<String, Void, MovieContainer> {
+        private TmdbApi tmdbApi;
+        private TmdbConfiguration config;
+        @Override
+        protected MovieContainer doInBackground(String... searchString) {
+            try {
+                tmdbApi = new TmdbApi(API_KEY);
+                config = tmdbApi.getConfiguration();
+
+                // get movie id if movie found, 0 if not
+                int movieId = searchForMovie(searchString[0]);
+
+                if(movieId != 0)
+                    return getMovieDetails(movieId);// Big hero 6 = 177572
+                else
+                    return null;
+
+            } catch (Exception e) {
+                Log.d("MovieTask",e.toString());
+                return null;
+            }
+        }
+
+        /**
+         *
+         * @param searchString
+         * @return 0 if not found, movie ID if found
+         */
+        private int searchForMovie(String searchString) {
+            try {
+                TmdbSearch tmdbSearch = tmdbApi.getSearch();
+                MovieResultsPage movieResultsPage = tmdbSearch.searchMovie(searchString, 0, "en", false, 0);
+
                 if(movieResultsPage.getTotalResults() > 0)
                 {
                     List<MovieDb> movieDbsList = movieResultsPage.getResults();
-                    movie = movieDbsList.get(0);
-                    Log.d("MovieTask",movie.getOverview());
-                }*/
+                    MovieDb movie = movieDbsList.get(0);
+                    return movie.getId();
+                }else
+                {
+                    // Not found, return 0
+                    return 0;
+                }
+            } catch (Exception e) {
+                return 0;
+            }
+        }
+
+        /**
+         *
+         * @param movieId
+         * @return
+         */
+        private MovieContainer getMovieDetails(int movieId)
+        {
+            try {
                 TmdbMovies movies = tmdbApi.getMovies();
-                MovieDb movie = movies.getMovie(177572, "en");
+                MovieDb movie = movies.getMovie(movieId, "en");
                 String imgUrl = config.getBaseUrl() + "w154" + movie.getPosterPath();
 
                 // Put the returned movie details in a container to pass
-                return new MovieContainer(imgUrl,movie.getTitle(),movie.getOverview(),movie.getHomepage());
-            } catch (Exception e) {
-                Log.d("MovieTask",e.toString());
-                return new MovieContainer("","","","");
+                return new MovieContainer(imgUrl, movie.getTitle(), movie.getOverview(), movie.getHomepage());
+            } catch (Exception e)
+            {
+                return null;
             }
         }
 
@@ -212,6 +250,9 @@ public class GetMovieActivity extends Activity {
             }
             // Dismiss spinner dialog
             progressDialog.dismiss();
+
+            if(result == null)
+                Toast.makeText(getBaseContext(), "Movie could not be found", Toast.LENGTH_LONG).show();
         }
     }
 }
