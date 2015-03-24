@@ -107,13 +107,8 @@ public class MovieListActivity extends FragmentActivity
 
         switch (item.getItemId()) {
             case R.id.newMovie:
-                // Create a new movie.
-                //TODO: start new activity for result
+                // start new activity for result
                 startActivityForResult(new Intent(MovieListActivity.this, GetMovieActivity.class), GET_MOVIE_REQUEST);
-                //Movie m_add = new Movie();
-                //DatabaseHandler.getInstance(this).putMovie(m_add);
-                // Open a new fragment with the new id
-                //onItemSelected(m_add.id);
                 return true;
             case R.id.deleteMovie:
                 if (selectedId != -1) {
@@ -134,20 +129,26 @@ public class MovieListActivity extends FragmentActivity
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        super.onActivityResult(requestCode,resultCode,data);
-        switch (requestCode)
-        {
-            case (GET_MOVIE_REQUEST):
-            {
-                if(resultCode == Activity.RESULT_OK)
-                {
-                    // TODO: Extract movie data returned from the child activity.
-                    Movie m_add = new Movie();
-                    DatabaseHandler.getInstance(this).putMovie(m_add);
-                    // Open a new fragment with the new id
-                    onItemSelected(m_add.id);
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case (GET_MOVIE_REQUEST): {
+                if (resultCode == Activity.RESULT_OK) {
+                    try {
+                        // Extract movie data returned from the child activity.
+                        Movie m_add = new Movie();
+
+                        m_add.title = data.getStringExtra(Movie.COL_TITLE);
+                        m_add.description = data.getStringExtra(Movie.COL_DESCRIPTION);
+                        m_add.imagepath = data.getStringExtra(Movie.COL_IMAGEPATH);
+                        m_add.weburl = data.getStringExtra(Movie.COL_WEBURL);
+
+                        DatabaseHandler.getInstance(this).putMovie(m_add);
+                        // Open a new fragment with the new id
+                        onItemSelected(m_add.id);
+                    } catch (Exception e) {
+
+                    }
                 }
                 break;
             }

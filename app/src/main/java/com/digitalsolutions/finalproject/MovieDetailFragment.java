@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.digitalsolutions.finalproject.database.DatabaseHandler;
 import com.digitalsolutions.finalproject.database.Movie;
+import com.squareup.picasso.Picasso;
 
 /**
  * A fragment representing a single Movie detail screen.
@@ -92,8 +93,8 @@ public class MovieDetailFragment extends Fragment {
             });
 
             imgCoverImg = ((ImageView) rootView.findViewById(R.id.movie_image));
-            // TODO: set the image using picasso
-            imgCoverImg.setImageResource(R.drawable.fillerimg);
+            // set the image using picasso
+            Picasso.with(getActivity()).load(mItem.imagepath).into(imgCoverImg);
         }
 
         return rootView;
