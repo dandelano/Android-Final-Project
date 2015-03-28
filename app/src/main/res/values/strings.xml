@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">My Movie Companion</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- Splash -->
+    <string name="txtSplash">My Movie\nCompanion</string>
+    <!-- Main -->
+    <string name="btnViewLibrary">View Library</string>
+    <string name="btnAddMovie">Add Movie</string>
+    <string name="btnDeleteMovie">Delete Movie</string>
+    <string name="btnEditMovie">Edit Movie</string>
+    <!-- Movie Lists -->
+    <string name="title_movie_list">Movies</string>
+    <string name="title_movie_detail">Movie Detail</string>
+    <string name="txtDescription">Candy bonbon pastry jujubes lollipop wafer biscuit biscuit. Topping brownie sesame snaps sweet roll pie. Croissant danish biscuit soufflé caramels jujubes jelly. Dragée danish caramels lemon drops dragée. Gummi bears cupcake biscuit tiramisu sugar plum pastry. Dragée gummies applicake pudding liquorice. Donut jujubes oat cake jelly-o. Dessert bear claw chocolate cake gummies lollipop sugar plum ice cream gummies cheesecake.</string>
+
+    <!-- Get Movie Activity -->
+    <string name="title_activity_get_movie">Search Movies</string>
+    <string name="txtSearchHint">Enter movie title to search</string>
+    <string name="btnSearchMovie">Search Movie</string>
+    <string name="btnSaveMovie">Save Movie</string>
+    <string name="btnCancelSearch">Cancel</string>
+
+</resources>
