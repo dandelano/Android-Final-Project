@@ -103,19 +103,5 @@ public class MovieDetailFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        //updateMovieFromUI();
-    }
-
-    private void updateMovieFromUI()
-    {
-        if (mItem != null)
-        {
-            mItem.title = txtTitle.getText().toString();
-            mItem.description = txtDescription.getText().toString();
-            mItem.weburl = txtWebUrl.getText().toString();
-            //mItem.imagepath = mItem.imagepath;
-
-            DatabaseHandler.getInstance(getActivity()).putMovie(mItem);
-        }
     }
 }

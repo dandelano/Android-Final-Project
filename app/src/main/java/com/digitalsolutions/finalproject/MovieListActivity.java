@@ -1,6 +1,8 @@
 package com.digitalsolutions.finalproject;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -112,12 +114,28 @@ public class MovieListActivity extends FragmentActivity
                 return true;
             case R.id.deleteMovie:
                 if (selectedId != -1) {
-                    // TODO: Fix the delete method!!! Not actually deleting the movie data.(Issue in detail frag, was inserting new movie)
-                    // TODO: put a confirmation before delete
-                    Movie m_delete = DatabaseHandler.getInstance(this).getMovie(selectedId);
-                    DatabaseHandler.getInstance(this).removeMovie(m_delete);
-                    selectedId = -1;
-                    onItemSelected(selectedId);
+                    // Create confirmation before delete
+                    AlertDialog confirmationDialog = new AlertDialog.Builder(this)
+                            .setTitle("Delete")
+                            .setMessage("Are you sure you want to remove this movie?")
+                            .setIcon(R.drawable.ic_action_discard)
+                            .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                    // Delete the selected id and get new selection Id from function
+                                    selectedId = deleteSelected(selectedId);
+                                    onItemSelected(selectedId);
+                                }
+                            })
+                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            })
+                            .create();
+                            confirmationDialog.show();
                 } else {
                     Toast.makeText(this, "No movie selected", Toast.LENGTH_SHORT).show();
                 }
@@ -126,6 +144,14 @@ public class MovieListActivity extends FragmentActivity
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    // Delete the given movie Id and return -1 to select nothing
+    private long deleteSelected(long movieId)
+    {
+        Movie m_delete = DatabaseHandler.getInstance(this).getMovie(movieId);
+        DatabaseHandler.getInstance(this).removeMovie(m_delete);
+        return -1;
     }
 
     @Override

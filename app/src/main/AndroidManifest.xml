@@ -20,11 +20,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="landscape" >
-        </activity>
-        <activity
             android:name=".MovieListActivity"
             android:label="@string/title_movie_list"
             android:screenOrientation="landscape" >
